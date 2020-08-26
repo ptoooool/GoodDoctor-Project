@@ -6,7 +6,7 @@
     </b-modal>
     <div style="text-align:center" v-if="!this.loaded"><img src = "../../assets/images/bonoloading.gif"/> </div>
     <div style="margin-top : -40px;">
-    <div v-if="this.loaded &&this.loading&& feeds.length == 0">
+    <div v-if="this.loaded && this.loading && feeds.length == 0">
       <b-container fluid class="bv-example-row">
         <b-row align-h="center">
           <b-col xl="5">
@@ -115,7 +115,7 @@
                           </button>
                         </div>
                         <div class="reply">
-                          <button>
+                          <button style="outline : 0;">
                             <b-icon-chat-square v-on:click="openReply(feed, index)"></b-icon-chat-square>
                           </button>
                         </div>
@@ -134,7 +134,7 @@
                         >
                         </star-rating>
                         <div class ="share">
-                          <button>
+                          <button style="outline : 0;">
                             <b-icon-pencil-square v-if="userId == feed.user.id && feed.modify == 1" @click="modifyContent(feed)"></b-icon-pencil-square>
                             <b-icon-pencil-square v-else style="color : rgba(194, 183, 183, 0.9); " @click="modifyContent(feed)"></b-icon-pencil-square>
                           </button>

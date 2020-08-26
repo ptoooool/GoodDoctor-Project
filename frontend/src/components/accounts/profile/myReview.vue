@@ -44,7 +44,7 @@
                     </button>
                   </div>
                   <div class="reply">
-                    <button>
+                    <button style="outline : 0;">
                       <b-icon-chat-square v-on:click="openReply(feed, index)"></b-icon-chat-square>
                     </button>
                   </div>

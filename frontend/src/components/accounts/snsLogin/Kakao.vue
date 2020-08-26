@@ -68,9 +68,6 @@ export default {
           .catch(err => {
               alert("이미 가입된 이메일입니다. 직접 로그인 부탁 드립니다.")
           })
-          },
-          fail : error => {
-              this.$router.push("/errorPage");
           }
       })
     }

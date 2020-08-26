@@ -12,60 +12,65 @@
       </h1>
       <!-- <p>{{hospitalFeeds[0]}}</p> -->
     </div>
-      
-      <!-- 3D carousel -->
-      <div v-if="hospitalFeeds.length==0">
-        <h3 class="mt-5" style="text-align: center;">🤣아직 작성된 리뷰가 없어요ㅜㅜ</h3>
+      <div style="text-align:center" v-if="!isload"><img src = "../../assets/images/bonoloading.gif"/><br>
+         <h3 class="mt-5" style="text-align: center;">😁피드를 로딩중이에요</h3>
       </div>
 
-      <div v-else> 
-        <h3 class="mt-5" style="text-align: center;">선택한 병원의 리뷰는 <span style="color: #17a2b8">{{hospitalFeeds.length}}개</span>가 있네요.</h3>
-        <div id="example" style="height: 24em; width: 100%;">
-          <carousel-3d
-            :controls-visible="true" 
-            :controls-prev-html="'&#10092;'" 
-            :controls-next-html="'&#10093;'"                     
-            :controls-width="60" 
-            :controls-height="0" 
-            :clickable="true" style="height: 30em; width: 90%;">
-            <slide 
-              v-for="(slide, i) in slides" 
-              :index="i" 
-              :key="slide" 
-              class="slide" 
-              style="height: 470px; width : 380px; margin-left: -10px; background-color: white"
-              type="button"
-              >
-              <div @click="openReply(hospitalFeeds[i], i)">
-              <figure style="" >
-                <div style="padding-top: 1em; margin-left: 1em;">
-                  <div class='row'> 
-                    <div style="margin-left: 1em">
-                      <img :src="hospitalFeeds[i].user.imageUrl" v-if="hospitalFeeds[i].user.imageUrl != null" class="profile-image" style="width : 1.5em;"/>
-                      <img src="../../assets/images/profile_default.png" style="width : 1.5em; height: 1.5em; float: left; margin-right:1em" alt v-else />
-                      {{hospitalFeeds[i].user.nickname}}
-                    </div>
-                    <p style="font-size: .7em; margin-left: auto; margin-right: 2em">{{formatDate(hospitalFeeds[i].updateDate)}}</p>  
-                  </div>
-                  <hr>
-                  <div style="padding-right : 16px;" v-if="hospitalFeeds[i].imageUrl != null">
-                    <img :src="hospitalFeeds[i].imageUrl"   height="250px;"/>
-                    <hr>
-                  </div>
-                  
-                  <div style="padding : 0px;" v-if="plusContent">
-                    <div class="text-truncate" style="width: 60%; padding : 0px;">
-                      {{hospitalFeeds[i].content}}
-                    </div>
-                  </div>
-
-                </div>
-              </figure>
-              </div>
-            </slide>
-          </carousel-3d>
+      <div v-else>
+        <!-- 3D carousel -->
+        <div v-if="hospitalFeeds.length==0 && isload">
+          <h3 class="mt-5" style="text-align: center;">🤣아직 작성된 리뷰가 없어요ㅜㅜ</h3>
         </div>
-      </div>
+
+        <div v-else> 
+          <h3 class="mt-5" style="text-align: center;">선택한 병원의 리뷰는 <span style="color: #17a2b8">{{hospitalFeeds.length}}개</span>가 있네요.</h3>
+          <div id="example" style="height: 24em; width: 100%;">
+            <carousel-3d
+              :controls-visible="true" 
+              :controls-prev-html="'&#10092;'" 
+              :controls-next-html="'&#10093;'"                     
+              :controls-width="60" 
+              :controls-height="0" 
+              :clickable="true" style="height: 30em; width: 90%;">
+              <slide 
+                v-for="(slide, i) in slides" 
+                :index="i" 
+                :key="slide" 
+                class="slide" 
+                style="height: 470px; width : 380px; margin-left: -10px; background-color: white"
+                type="button"
+                >
+                <div @click="openReply(hospitalFeeds[i], i)">
+                <figure style="" >
+                  <div style="padding-top: 1em; margin-left: 1em;">
+                    <div class='row'> 
+                      <div style="margin-left: 1em">
+                        <img :src="hospitalFeeds[i].user.imageUrl" v-if="hospitalFeeds[i].user.imageUrl != null" class="profile-image" style="width : 1.5em;"/>
+                        <img src="../../assets/images/profile_default.png" style="width : 1.5em; height: 1.5em; float: left; margin-right:1em" alt v-else />
+                        {{hospitalFeeds[i].user.nickname}}
+                      </div>
+                      <p style="font-size: .7em; margin-left: auto; margin-right: 2em">{{formatDate(hospitalFeeds[i].updateDate)}}</p>  
+                    </div>
+                    <hr>
+                    <div style="padding-right : 16px;" v-if="hospitalFeeds[i].imageUrl != null">
+                      <img :src="hospitalFeeds[i].imageUrl"   height="250px;"/>
+                      <hr>
+                    </div>
+                    
+                    <div style="padding : 0px;" v-if="plusContent">
+                      <div class="text-truncate" style="width: 60%; padding : 0px;">
+                        {{hospitalFeeds[i].content}}
+                      </div>
+                    </div>
+
+                  </div>
+                </figure>
+                </div>
+              </slide>
+            </carousel-3d>
+          </div>
+        </div>
+        </div>
     <div div class="HospitalDetail mx-auto">
       <!-- API 정보 -->
       <div class="ml-3" style="text-align: center; margin-top: 150px;">
@@ -141,9 +146,11 @@ export default {
         plusContent : true,
         isFavorite:false,
         index:0,
+        isload:false,
       } 
     },
  mounted() {
+   this.isload=false;
    this.$EventBus.$on("updateLike", (data) => {
       if (this.hospitalFeeds[data]) {
         this.hospitalFeeds[data].isClick = !this.hospitalFeeds[data].isClick;
@@ -167,6 +174,10 @@ export default {
       .then(res => {
         this.hospitalFeeds = res.data
         this.slides = this.hospitalFeeds.length
+        
+        setTimeout(() => {
+          this.isload=true;
+        }, 300);
       })
 
       var userId = this.$store.getters.userInfo.data.id

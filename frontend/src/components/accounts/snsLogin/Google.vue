@@ -103,9 +103,6 @@ export default {
               alert("이미 가입된 이메일입니다")
             });
         })
-        .catch(error => {
-           this.$router.push("/errorPage");
-        });
     }
   }
 };
